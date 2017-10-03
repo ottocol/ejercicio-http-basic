@@ -1,0 +1,92 @@
+<html>
+<head>
+    <title>Ejemplo muy simple de web y API con autentificación BASIC</title>
+</head>
+<body>
+    <h2>Lista de la compra colaborativa</h2>
+    <div id="form_login">
+        <label for="login">Usuario:</label><input type="text" id="login"> <br>
+        <label for="password">Contraseña:</label><input type="password" id="password"> <br>
+        <button id="boton_login">Login</button> 
+    </div>
+    <div id="form_logout" style="display:none">
+        <button id="boton_logout">Logout</button>
+    </div>
+    <div id="operaciones_api" style="display:none">
+        <button id="boton_listar">Listar items</button>
+        <div id="lista_items"></div>
+    </div>    
+    <script>
+        document.getElementById('boton_login').addEventListener('click', function(){
+            var credentials = {
+                login: document.getElementById('login').value,
+                password: document.getElementById('password').value
+            }
+            fetch('/api/testCredentials',{
+                method: 'POST',
+                headers: {
+                   'Content-type':'application/json'
+                },
+                body: JSON.stringify(credentials)
+            }).then(function(resp){
+                  if (resp.ok) {
+                      localStorage.login = credentials.login
+                      localStorage.password = credentials.password
+                      document.getElementById('form_login').style.display = 'none'
+                      document.getElementById('form_logout').style.display = 'block'
+                      document.getElementById('operaciones_api').style.display = 'block'
+                  }
+                  else
+                      alert("login y/o password incorrectos")
+            })
+        })
+
+        document.getElementById('boton_logout').addEventListener('click', function(){
+            document.getElementById('form_login').style.display = 'block'
+            document.getElementById('form_logout').style.display = 'none'
+            document.getElementById('operaciones_api').style.display = 'none'
+        })
+
+
+        function listarItems() {
+            var credsBasic = localStorage.login + ':' + localStorage.password
+            fetch('/api/items',{
+                headers: {
+                    'Authorization' : 'Basic ' + b64EncodeUnicode(credsBasic)
+                }
+            }).then(function(resp){
+                if (resp.ok) 
+                  return resp.json()
+                else
+                  alert("No tienes permisos")  
+            }).then(function(obj){
+                if (obj) {
+                    var html = ""
+                    obj.forEach(function(item) {
+                        html += '<li>' + item.nombre + ' (' + item.cantidad +  ')' +  '</li>'
+                    })
+                    html = '<ul>' + html  + '</ul>'
+                    document.getElementById('lista_items').innerHTML = html
+                }
+            })
+        }
+
+        document.getElementById('boton_listar').addEventListener('click', listarItems)
+
+        //funciones tomadas de https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+        function b64EncodeUnicode(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+                function toSolidBytes(match, p1) {
+                    return String.fromCharCode('0x' + p1);
+            }));
+        }
+
+        function b64DecodeUnicode(str) {
+            return decodeURIComponent(atob(str).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        }
+
+    </script>    
+</body>
+</html>
