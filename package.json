@@ -4,7 +4,8 @@
   "description": "Ejemplo sencillo de app web y de API que usa autenticación BASIC",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
