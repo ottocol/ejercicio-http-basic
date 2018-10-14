@@ -1,4 +1,4 @@
-# ejemplo-simple-http-basic
+# Ejercicio de HTTP Basic
 
 Ejercicio para implementar autentificación BASIC.
 
