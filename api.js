@@ -1,6 +1,17 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 
+var users = new Map()
+var lista = new Map()
+var idActual = 3
+lista.set(1, {id:1, nombre:"Ron", cantidad:"1 botella"})
+lista.set(2, {id:2, nombre:"Tomates", cantidad:"1 kg"})
+lista.set(3, {id:3, nombre:"Agua", cantidad:"5 litros"})
+
+users.set("adi", {login:"adi", password:"adi"})
+users.set("pepe", {login:"pepe", password:"pepe"})
+
+
 function checkAuth(pet, resp, next) {
     //TO-DO: sustituir el false por comprobar auth. Basic
     //1. Extraer la cabecera 'Authorization'
@@ -73,17 +84,5 @@ router.post('/items', checkAuth, function(pet, resp){
   resp.send(insertado)
   resp.end();
 })
-
-var lista
-var idActual = 3
-
-lista = new Map() 
-lista.set(1, {id:1, nombre:"Ron", cantidad:"1 botella"})
-lista.set(2, {id:2, nombre:"Tomates", cantidad:"1 kg"})
-lista.set(3, {id:3, nombre:"Agua", cantidad:"5 litros"})
-
-users = new Map()
-users.set("adi", {login:"adi", password:"adi"})
-users.set("pepe", {login:"pepe", password:"pepe"})
 
 module.exports = router
