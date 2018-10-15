@@ -13,12 +13,12 @@ users.set("pepe", {login:"pepe", password:"pepe"})
 
 
 function checkAuth(pet, resp, next) {
-    //TO-DO: sustituir el false por comprobar auth. Basic
+    //TO-DO: Ahora mismo SIEMPRE deja hacer cualquier operación por el if(true). Cambiar eso por comprobar auth. Basic
     //1. Extraer la cabecera 'Authorization'
     //2. Parsear la cabecera para quedarnos con login&pw en Base64
     //3. Decodificar Base64
     //4. Separar login y pw y comprobarlos con isLoginAndPasswordOK
-    if (false)
+    if (true)
         next();
     else {
         resp.status(401);
