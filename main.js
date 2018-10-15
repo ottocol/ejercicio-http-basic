@@ -2,7 +2,7 @@ var express = require('express')
 var app = express()
 
 //web
-app.use('/web', express.static('web'));
+app.use('/', express.static('web'));
 
 //API
 var api = require('./api')
